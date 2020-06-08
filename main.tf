@@ -22,7 +22,7 @@ resource "azurerm_resource_group" "security_group" {
 }
 
 module "key_vault" {
-  source                               = "git@github.com:Azure/terraform-azurerm-sec-key-vault"
+  source                               = "git::https://github.com/Azure/terraform-azurerm-sec-key-vault"
   resource_group_name                  = data.azurerm_resource_group.current.name
   prefix                               = local.prefix
   suffix                               = local.suffix
