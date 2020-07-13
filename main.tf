@@ -39,6 +39,8 @@ module "key_vault" {
 resource "azurerm_private_dns_zone" "key_vault_dns_zone" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = data.azurerm_resource_group.current.name
+
+  depends_on = [null_resource.module_depends_on]
 }
 
 resource "azurerm_private_endpoint" "private_endpoint" {
