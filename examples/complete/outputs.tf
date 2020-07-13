@@ -5,3 +5,7 @@ output "resource_group" {
 output "key_vault" {
   value = module.security.key_vault
 }
+
+output "private_endpoint" {
+  value = module.security.private_endpoint
+}

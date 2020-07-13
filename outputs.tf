@@ -5,3 +5,7 @@ output "resource_group" {
 output "key_vault" {
   value = module.key_vault.key_vault
 }
+
+output "private_endpoint" {
+  value = azurerm_private_endpoint.private_endpoint
+}
