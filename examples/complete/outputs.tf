@@ -9,3 +9,7 @@ output "key_vault" {
 output "private_endpoint" {
   value = module.security.private_endpoint
 }
+
+output "private_dns_zone" {
+  value = module.security.private_dns_zone
+}

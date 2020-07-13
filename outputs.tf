@@ -9,3 +9,7 @@ output "key_vault" {
 output "private_endpoint" {
   value = azurerm_private_endpoint.private_endpoint
 }
+
+output "private_dns_zone" {
+  value = azurerm_private_dns_zone.key_vault_dns_zone
+}
