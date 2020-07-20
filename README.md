@@ -1,4 +1,4 @@
-# 💥⚠❗ This is an ALPHA stage application❗⚠💥
+# 💥⚠❗ This is an ALPHA stage module ❗⚠💥
 
 This module is not suitable for production.
 
