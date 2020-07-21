@@ -24,6 +24,7 @@ resource "azurerm_resource_group" "security_group" {
 module "key_vault" {
   source                               = "git::https://github.com/Azure/terraform-azurerm-sec-key-vault"
   resource_group_name                  = local.resource_group.name
+  resource_group_location              = local.resource_group.location
   prefix                               = local.prefix
   suffix                               = local.suffix
   allowed_ip_ranges                    = var.allowed_ip_ranges
