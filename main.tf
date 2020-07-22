@@ -6,7 +6,7 @@ provider "azurerm" {
 locals {
   prefix              = var.prefix
   suffix              = concat(["sec"], var.suffix)
-  resource_group_name = var.use_existing_resource_group ? var.resource_group_name : azurerm_resource_group.security_group[0].name
+  resource_group      = var.use_existing_resource_group ? azurerm_resource_group.security_group[0] : azurerm_resource_group.security_group[0]
 }
 
 module "naming" {
@@ -22,8 +22,9 @@ resource "azurerm_resource_group" "security_group" {
 }
 
 module "key_vault" {
-  source                               = "git::https://github.com/jjcollinge/terraform-azurerm-sec-key-vault?ref=jjcollinge-patch-1"
-  resource_group_name                  = data.azurerm_resource_group.current.name
+  source                               = "git::https://github.com/Azure/terraform-azurerm-sec-key-vault"
+  resource_group_name                  = local.resource_group.name
+  resource_group_location              = local.resource_group.location
   prefix                               = local.prefix
   suffix                               = local.suffix
   allowed_ip_ranges                    = var.allowed_ip_ranges
@@ -34,11 +35,21 @@ module "key_vault" {
   enabled_for_template_deployment      = var.enabled_for_template_deployment
 }
 
+resource "azurerm_private_dns_zone" "key_vault_dns_zone" {
+  name                = "privatelink.vaultcore.azure.net"
+  resource_group_name = local.resource_group.name
+}
+
 resource "azurerm_private_endpoint" "private_endpoint" {
   name                = module.naming.private_endpoint.name
-  resource_group_name = data.azurerm_resource_group.current.name
-  location            = data.azurerm_resource_group.current.location
+  resource_group_name = local.resource_group.name
+  location            = local.resource_group.location
   subnet_id           = var.key_vault_private_endpoint_subnet_id
+
+  private_dns_zone_group {
+    name                 = "vault-dns-zone-group"
+    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault_dns_zone.id]
+  }
 
   private_service_connection {
     name                           = module.naming.private_service_connection.name
