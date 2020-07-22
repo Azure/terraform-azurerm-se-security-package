@@ -6,7 +6,7 @@ provider "azurerm" {
 locals {
   prefix              = var.prefix
   suffix              = concat(["sec"], var.suffix)
-  resource_group      = var.use_existing_resource_group ? azurerm_resource_group.security_group[0] : azurerm_resource_group.security_group[0]
+  resource_group      = var.use_existing_resource_group ? data.azurerm_resource_group.current[0] : azurerm_resource_group.security_group[0]
 }
 
 module "naming" {
