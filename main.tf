@@ -33,15 +33,11 @@ module "key_vault" {
   enabled_for_deployment               = var.enabled_for_deployment
   enabled_for_disk_encryption          = var.enabled_for_disk_encryption
   enabled_for_template_deployment      = var.enabled_for_template_deployment
-
-  module_depends_on = [null_resource.module_depends_on]
 }
 
 resource "azurerm_private_dns_zone" "key_vault_dns_zone" {
   name                = "privatelink.vaultcore.azure.net"
   resource_group_name = local.resource_group.name
-
-  depends_on = [null_resource.module_depends_on]
 }
 
 resource "azurerm_private_endpoint" "private_endpoint" {
@@ -60,13 +56,5 @@ resource "azurerm_private_endpoint" "private_endpoint" {
     subresource_names              = ["vault"]
     private_connection_resource_id = module.key_vault.key_vault.id
     is_manual_connection           = false
-  }
-
-  depends_on = [null_resource.module_depends_on]
-}
-
-resource "null_resource" "module_depends_on" {
-  triggers = {
-    value = "${length(var.module_depends_on)}"
   }
 }
